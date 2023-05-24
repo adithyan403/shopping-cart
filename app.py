@@ -18,7 +18,11 @@ def mainpage():
     except:
         print("unseccessful cant connect")
     print("server started")
-    
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['user']
+    products=collection.find({})
+    data=products
+    print(data)
     return render_template("index.html",items=data)
 @app.route('/admin')
 def adminpage():
@@ -26,6 +30,12 @@ def adminpage():
     return render_template('admin.html')
 @app.route('/viewproducts')
 def view():
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['user']
+    print("data inserted successfully")
+    products=collection.find({})
+    data=products
+    
    
     return render_template("view products.html",items=data)
 
@@ -38,12 +48,11 @@ def submit1():
     name=request.form.get("name")
     price=request.form.get("price")
     category=request.form.get("category")
-    image=request.files['image']
-    dataimage=image.read()
+    image=request.form.get('image')
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
-    collection.insert_one({"name":name,"price":price,"category":category,"image":dataimage})
+    collection.insert_one({"name":name,"price":price,"category":category,"image":image})
     print("data inserted successfully")
-    products=collection.find_one()
-    data.append(products)
+    products=collection.find({})
+    data=products
     return render_template("view products.html",items=data)

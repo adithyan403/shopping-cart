@@ -1,5 +1,7 @@
 from flask import Flask,render_template,request
 from pymongo import MongoClient as mon
+import bcrypt
+
 
 client = mon('mongodb://localhost:27017/')
 
@@ -10,6 +12,10 @@ if __name__ == '__name__':
 
 
 data=[]
+db = client['shopping']  # Access the 'mydatabase' database
+collection = db['user']
+products=collection.find({})
+data=products
 @app.route('/')
 def mainpage():
     try:
@@ -56,3 +62,22 @@ def submit1():
     products=collection.find({})
     data=products
     return render_template("view products.html",items=data)
+
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/sign up")
+def signup():
+    return render_template("signup.html")
+@app.route("/signbutton",methods=["POST"])
+def signupbutton():
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['data']
+    email=request.form.get("email")
+    password=request.form.get("password")
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    collection.insert_one({"email":email,"password":hashed_password})
+    return render_template("index.html",items=data)

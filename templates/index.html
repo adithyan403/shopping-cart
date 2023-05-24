@@ -24,23 +24,27 @@
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">All products</a>
+                    <a class="nav-link" href="#">My cart</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Menu
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
                   </li>
                 </ul>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Account
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/login">LOGIN</a></li>
+                    <li><a class="dropdown-item" href="/sign up">SIGN UP</a></li>
+                    <li><a class="dropdown-item" href="#">ORDERS</a></li>
+                  </ul>
+                </div>
                 <form class="d-flex">
                   <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                   <button class="btn btn-outline-success" type="submit">Search</button>
@@ -60,7 +64,7 @@
             <div class="card-body">
               <h5 class="card-title">{{item.name}}</h5>
               <p class="card-text">{{item.price}}</p>
-              <a href="#" class="btn btn-primary">BUY NOW</a>
+              <a href="#" class="btn btn-primary">ADD TO CART</a>
             </div>
           </div>
         </div>

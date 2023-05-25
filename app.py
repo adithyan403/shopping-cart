@@ -35,13 +35,12 @@ def mainpage():
 @app.route('/admin')
 def adminpage():
     
-    return render_template('admin.html')
+    return render_template('admin.html',items=data)
 @app.route('/viewproducts')
 def view():
     user_id = session.get('user_id')
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
-    print("data inserted successfully")
     products=collection.find({})
     data=products
     
@@ -64,7 +63,7 @@ def submit1():
     print("data inserted successfully")
     products=collection.find({})
     data=products
-    return render_template("view products.html",items=data)
+    return redirect("/viewproducts",items=data)
 
 
 @app.route("/login")
@@ -120,3 +119,6 @@ def cart():
         return render_template("cart.html",user=session.get("user_id"))
     else:
         return redirect("/login")
+    
+
+

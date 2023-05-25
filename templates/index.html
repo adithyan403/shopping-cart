@@ -37,12 +37,22 @@
                 </ul>
                 <div class="dropdown">
                   <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Account
+                    {% if user %}
+                      {{"Your Account"}}
+                    {% else %}
+                      {{"Not logged in"}}
+                    {% endif %}
                   </button>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/login">LOGIN</a></li>
-                    <li><a class="dropdown-item" href="/sign up">SIGN UP</a></li>
-                    <li><a class="dropdown-item" href="#">ORDERS</a></li>
+                    {% if user %}
+                      <li><a class="dropdown-item" href="#">ORDERS</a></li>
+                      <li><a class="dropdown-item" href="/logout">LOGOUT</a></li>
+                    {% else %}
+                      <li><a class="dropdown-item" href="/login">LOGIN</a></li>
+                      <li><a class="dropdown-item" href="/sign up">SIGN UP</a></li>
+                    {% endif %}
+                    
+                    
                   </ul>
                 </div>
                 <form class="d-flex">

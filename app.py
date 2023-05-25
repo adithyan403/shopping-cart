@@ -1,11 +1,14 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,session,redirect
 from pymongo import MongoClient as mon
 import bcrypt
+from flask_session import Session
 
 
 client = mon('mongodb://localhost:27017/')
 
 app=Flask("__name__")
+app.config['SECRET_KEY'] = 'key'  # Replace with a secure secret key
+app.secret_key = app.config['SECRET_KEY']
 
 if __name__ == '__name__':
     app.run(debug=True)
@@ -18,24 +21,25 @@ products=collection.find({})
 data=products
 @app.route('/')
 def mainpage():
+    user_id = session.get('user_id')
+    
     try:
         client.admin.command("ping")
-        print(" database connected successfull")
     except:
         print("unseccessful cant connect")
-    print("server started")
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
     products=collection.find({})
     data=products
     print(data)
-    return render_template("index.html",items=data)
+    return render_template("index.html",items=data,user=user_id)
 @app.route('/admin')
 def adminpage():
     
     return render_template('admin.html')
 @app.route('/viewproducts')
 def view():
+    user_id = session.get('user_id')
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
     print("data inserted successfully")
@@ -67,6 +71,33 @@ def submit1():
 @app.route("/login")
 def login():
     return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
+
+@app.route("/loginbutton",methods=["POST"])
+def loginbutton():
+    email=request.form.get("email")
+    password=request.form.get("password")
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['data']
+    userdata=collection.find({})
+    
+    for i in userdata:
+        password_data=i["password"]
+        entered_password_hash = bcrypt.hashpw(password.encode('utf-8'), password_data)
+        if i["email"]==email  and password_data==entered_password_hash:
+            session['user_id'] = email
+            session['password']=password 
+            return redirect("/")
+        else:
+            continue
+    else:
+        return redirect("/login")
+        
+    
 
 @app.route("/sign up")
 def signup():

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Signup Page</title>
+  <title>Login Page</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     body {
@@ -21,6 +21,7 @@
 <body>
   <div class="container">
     <h1>LOGIN</h1>
+    
     <form action="/loginbutton" method="POST">
       <div class="form-group">
         <label for="email">Email:</label>
@@ -30,7 +31,10 @@
         <label for="password">Password:</label>
         <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
       </div>
-      <button type="submit" class="btn btn-primary" action="/signbutton">Signup</button>
+      <button type="submit" class="btn btn-primary" action="/signbutton">Login</button>
+      {% if not status %}
+        <p class="error">{{"User not found if new please Signup"}}</p>
+      {% endif %}
     </form>
   </div>
 </body>

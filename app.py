@@ -13,7 +13,6 @@ app.secret_key = app.config['SECRET_KEY']
 if __name__ == '__name__':
     app.run(debug=True)
 
-
 data=[]
 db = client['shopping']  # Access the 'mydatabase' database
 collection = db['user']
@@ -70,7 +69,7 @@ def submit1():
 
 @app.route("/login")
 def login():
-    return render_template("login.html")
+    return render_template("login.html",status=login)
 
 @app.route("/logout")
 def logout():
@@ -90,7 +89,9 @@ def loginbutton():
         entered_password_hash = bcrypt.hashpw(password.encode('utf-8'), password_data)
         if i["email"]==email  and password_data==entered_password_hash:
             session['user_id'] = email
-            session['password']=password 
+            session['password']=password
+            
+            
             return redirect("/")
         else:
             continue
@@ -111,4 +112,11 @@ def signupbutton():
     salt = bcrypt.gensalt()
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
     collection.insert_one({"email":email,"password":hashed_password})
-    return render_template("index.html",items=data)
+    return redirect("/login")
+
+@app.route("/cart")
+def cart():
+    if session.get("user_id"):
+        return render_template("cart.html",user=session.get("user_id"))
+    else:
+        return redirect("/login")

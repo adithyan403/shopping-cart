@@ -63,7 +63,7 @@ def submit1():
     print("data inserted successfully")
     products=collection.find({})
     data=products
-    return redirect("/viewproducts",items=data)
+    return redirect("/viewproducts")
 
 
 @app.route("/login")
@@ -120,5 +120,19 @@ def cart():
     else:
         return redirect("/login")
     
+@app.route("/delete",methods=["POST"])
+def delete():
+    id=request.form.get("name")
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['user']
+    result = collection.delete_one({'name': id})
 
+    if result.deleted_count > 0:
+        return redirect("/viewproducts")
+    else:
+        return f"No item found with given ID"
+    
+@app.route("/deletepage")
+def deletepage():
+    return render_template("delete.html")
 

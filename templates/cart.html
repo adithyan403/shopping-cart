@@ -7,86 +7,27 @@
     <title>Shopping Cart</title>
 </head>
 <body>
-    <header style="background-color: lightgreen;">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: yellow;">
-            <div class="container-fluid" style="background-color: yellowgreen;">
-              <a class="navbar-brand" href="#">Shopping .com</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="#">My cart</a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Menu
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                  </li>
-                </ul>
-                <div class="dropdown">
-                  <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {% if user %}
-                      {{"Your Account"}}
-                    {% else %}
-                      {{"Not logged in"}}
-                    {% endif %}
-                  </button>
-                  <ul class="dropdown-menu">
-                    {% if user %}
-                      <li><a class="dropdown-item" href="#">ORDERS</a></li>
-                      <li><a class="dropdown-item" href="/logout">LOGOUT</a></li>
-                    {% else %}
-                      <li><a class="dropdown-item" href="/login">LOGIN</a></li>
-                      <li><a class="dropdown-item" href="/sign up">SIGN UP</a></li>
-                    {% endif %}
-                    
-                    
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </nav>
-    </header>
     <div class="container mt-5">
         <h1>Shopping Cart</h1>
         <table class="table mt-4">
+            {% for item in items %}
             <thead>
                 <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Total</th>
-                    <th></th>
+                  <th>{{item.name}}</th>
+                  <th>{{item.price}}</th>
+                  <th></th>
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Product 1</td>
-                    <td>$10</td>
-                    <td>2</td>
-                    <td>$20</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm">Remove</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Product 2</td>
-                    <td>$15</td>
-                    <td>1</td>
-                    <td>$15</td>
-                    <td>
-                        <button class="btn btn-danger btn-sm">Remove</button>
-                    </td>
-                </tr>
-            </tbody>
+          </thead>
+          <tbody>
+              <tr>
+                  <td>Product</td>
+                  <td>{{item.price}}</td>
+                  <td>
+                      <button class="btn btn-danger btn-sm">Remove</button>
+                  </td>
+              </tr>
+          </tbody>
+          {% endfor %}
         </table>
         <div class="text-right">
             <h4>Total: $35</h4>

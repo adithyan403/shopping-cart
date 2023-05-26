@@ -116,7 +116,12 @@ def signupbutton():
 @app.route("/cart")
 def cart():
     if session.get("user_id"):
-        return render_template("cart.html",user=session.get("user_id"))
+        db = client['shopping']  # Access the 'mydatabase' database
+        user_id = session.get('user_id')
+        collection=db[user_id]
+        data=collection.find({})
+
+        return render_template("cart.html",items=data)
     else:
         return redirect("/login")
     
@@ -135,4 +140,30 @@ def delete():
 @app.route("/deletepage")
 def deletepage():
     return render_template("delete.html")
+
+@app.route("/editproduct")
+def edit():
+    return render_template("edit.html")
+@app.route("/editsubmit",methods=["POST"])
+def editsubmit():
+    name=request.form.get("name")
+    price=request.form.get("price")
+    category=request.form.get("category")
+    image=request.form.get('image')
+    db = client['shopping']  # Access the 'mydatabase' database
+    collection = db['user']
+    collection.update_one({"name":name},{'$set': {"name":name,"price":price,"category":category,"image":image}})
+    return redirect("/viewproducts") 
+
+@app.route("/addcart/<item>")
+def addcart(item):
+    db = client['shopping']  # Access the 'mydatabase' database
+    user_id = session.get('user_id')
+    collection=db[user_id]
+    collection2=db["user"]
+    price=collection2.find_one({"name":item})
+
+    collection.insert_one({"name":item,"price":price["price"]})
+    
+    return redirect("/")
 

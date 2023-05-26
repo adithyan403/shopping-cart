@@ -12,7 +12,8 @@ app.secret_key = app.config['SECRET_KEY']
 
 if __name__ == '__name__':
     app.run(debug=True)
-
+   
+price=0
 data=[]
 db = client['shopping']  # Access the 'mydatabase' database
 collection = db['user']

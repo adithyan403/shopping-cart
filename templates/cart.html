@@ -11,26 +11,26 @@
         <h1>Shopping Cart</h1>
         <table class="table mt-4">
             {% for item in items %}
-            <thead>
-                <tr>
-                  <th>{{item.name}}</th>
-                  <th>{{item.price}}</th>
-                  <th></th>
+                <thead>
+                    <tr>
+                    <th>{{item.name}}</th>
+                    <th>{{item.price}}</th>
+                     <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Product</td>
+                        <td>{{item.price}}</td>
+                        <td>
+                            <button class="btn btn-danger btn-sm">Remove</button>
+                        </td>
                 </tr>
-          </thead>
-          <tbody>
-              <tr>
-                  <td>Product</td>
-                  <td>{{item.price}}</td>
-                  <td>
-                      <button class="btn btn-danger btn-sm">Remove</button>
-                  </td>
-              </tr>
-          </tbody>
+                </tbody>
           {% endfor %}
         </table>
+        
         <div class="text-right">
-            <h4>Total: $35</h4>
             <button class="btn btn-primary">Checkout</button>
         </div>
     </div>

@@ -10,27 +10,31 @@
     <div class="container mt-5">
         <h1>Shopping Cart</h1>
         <table class="table mt-4">
-            {% for item in items %}
+            
                 <thead>
                     <tr>
-                    <th>{{item.name}}</th>
-                    <th>{{item.price}}</th>
+                    <th>product</th>
+                    <th>price</th>
                      <th></th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for item in items %}
                     <tr>
-                        <td>Product</td>
+                        <th scope="row" style="width: 10px; height: 10px;"><img src={{item.image}} alt="Image"></th>
+                        <td>{{item.name}}</td>
                         <td>{{item.price}}</td>
                         <td>
-                            <button class="btn btn-danger btn-sm">Remove</button>
+                            <a href="/removecart/{{item.name}}" class="btn btn-primary">Remove</a>
                         </td>
-                </tr>
+                    </tr>
+                    {% endfor %}
                 </tbody>
-          {% endfor %}
+                    
         </table>
         
         <div class="text-right">
+            <h4>Total: {{total}}</h4>
             <button class="btn btn-primary">Checkout</button>
         </div>
     </div>

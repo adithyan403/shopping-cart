@@ -13,7 +13,7 @@ app.secret_key = app.config['SECRET_KEY']
 if __name__ == '__name__':
     app.run(debug=True)
    
-price=0
+
 data=[]
 db = client['shopping']  # Access the 'mydatabase' database
 collection = db['user']
@@ -30,8 +30,8 @@ def mainpage():
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
     products=collection.find({})
+    
     data=products
-    print(data)
     return render_template("index.html",items=data,user=user_id)
 @app.route('/admin')
 def adminpage():
@@ -116,13 +116,19 @@ def signupbutton():
 
 @app.route("/cart")
 def cart():
+    price1=0
     if session.get("user_id"):
         db = client['shopping']  # Access the 'mydatabase' database
         user_id = session.get('user_id')
         collection=db[user_id]
         data=collection.find({})
+        usercollections=db[user_id]
+        userproducts=usercollections.find({})
+        for i in userproducts:
+            price1+=int(i["price"])
+        
 
-        return render_template("cart.html",items=data)
+        return render_template("cart.html",items=data,total=price1)
     else:
         return redirect("/login")
     
@@ -164,7 +170,15 @@ def addcart(item):
     collection2=db["user"]
     price=collection2.find_one({"name":item})
 
-    collection.insert_one({"name":item,"price":price["price"]})
+    collection.insert_one({"name":item,"price":price["price"],"image":price["image"]})
     
     return redirect("/")
+
+@app.route("/removecart/<item>")
+def removecart(item):
+    db = client['shopping']  # Access the 'mydatabase' database
+    user_id = session.get('user_id')
+    collection=db[user_id]
+    collection.delete_one({"name":item})
+    return redirect("/cart")
 

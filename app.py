@@ -21,6 +21,7 @@ products=collection.find({})
 data=products
 @app.route('/')
 def mainpage():
+    count=0
     user_id = session.get('user_id')
     
     try:
@@ -30,9 +31,13 @@ def mainpage():
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
     products=collection.find({})
-    
     data=products
-    return render_template("index.html",items=data,user=user_id)
+    if user_id:
+        collection2=db[user_id]
+        count = collection2.count_documents({})
+        
+    
+    return render_template("index.html",items=data,user=user_id,number=count)
 @app.route('/admin')
 def adminpage():
     

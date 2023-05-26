@@ -74,7 +74,7 @@
             <div class="card-body">
               <h5 class="card-title">{{item.name}}</h5>
               <p class="card-text">{{item.price}}</p>
-              <a href="/addcart/{{item.name}}" class="btn btn-primary">ADD TO CART</a>
+              <a href="/addcart/{{item.name}}" class="btn btn-primary"><span class="badge text-bg-secondary">ADD TO CART</span>{{session["count"]}}</a>
             </div>
           </div>
         </div>

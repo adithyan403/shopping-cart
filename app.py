@@ -21,7 +21,6 @@ products=collection.find({})
 data=products
 @app.route('/')
 def mainpage():
-    count=0
     user_id = session.get('user_id')
     
     try:
@@ -169,6 +168,13 @@ def editsubmit():
 
 @app.route("/addcart/<item>")
 def addcart(item):
+    user_id = session.get('user_id')
+    count=0
+    if user_id:
+        db = client['shopping']
+        collection2=db[user_id]
+        count = collection2.count_documents({"name":item})
+        
     db = client['shopping']  # Access the 'mydatabase' database
     user_id = session.get('user_id')
     collection=db[user_id]
@@ -186,4 +192,6 @@ def removecart(item):
     collection=db[user_id]
     collection.delete_one({"name":item})
     return redirect("/cart")
-
+@app.route("/orders")
+def order():
+    return render_template("order.html")

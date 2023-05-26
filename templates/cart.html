@@ -23,8 +23,9 @@
             
                 <thead>
                     <tr>
+                    <th>image</th>
                     <th>product</th>
-                    <th>price</th>
+                     <th> price</th>
                      <th></th>
                     </tr>
                 </thead>
@@ -37,6 +38,8 @@
                         <td>
                             <a href="/removecart/{{item.name}}" class="btn btn-primary">Remove</a>
                         </td>
+                        
+                        
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -45,7 +48,7 @@
         
         <div class="text-right">
             <h4>Total: {{total}}</h4>
-            <button class="btn btn-primary">Order now</button>
+            <a href="/orders" class="btn btn-primary">Order now</a>
         </div>
     </div>
 

@@ -197,4 +197,11 @@ def removecart(item):
     return redirect("/cart")
 @app.route("/orders")
 def order():
-    return render_template("order.html")
+    price1=0
+    db = client['shopping']  # Access the 'mydatabase' database
+    user_id = session.get('user_id')
+    collection=db[user_id]
+    orders=collection.find({})
+    for i in orders:
+            price1+=int(i["price"])
+    return render_template("order.html",items=orders,total=price1)

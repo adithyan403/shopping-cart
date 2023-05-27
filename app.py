@@ -84,6 +84,7 @@ def logout():
 
 @app.route("/loginbutton",methods=["POST"])
 def loginbutton():
+    session["status"]=True
     user_id = session.get('user_id')
     email=request.form.get("email")
     password=request.form.get("password")
@@ -103,6 +104,7 @@ def loginbutton():
         else:
             continue
     else:
+        session["status"]=False
         return redirect("/login")
         
     
@@ -116,10 +118,16 @@ def signupbutton():
     collection = db['data']
     email=request.form.get("email")
     password=request.form.get("password")
-    salt = bcrypt.gensalt()
-    hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    collection.insert_one({"email":email,"password":hashed_password})
-    return redirect("/login")
+    if collection.find({"email":email}) in collection.find({}):
+        return redirect("/sign up")
+    
+   
+    else:
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+        collection.insert_one({"email":email,"password":hashed_password})
+        return redirect("/login")
+    
 
 @app.route("/cart")
 def cart():

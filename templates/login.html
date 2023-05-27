@@ -32,7 +32,7 @@
         <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
       </div>
       <button type="submit" class="btn btn-primary" action="/signbutton">Login</button>
-      {% if not status %}
+      {% if session["status"]==False %}
         <p class="error">{{"User not found if new please Signup"}}</p>
       {% endif %}
     </form>

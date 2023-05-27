@@ -118,8 +118,15 @@ def signupbutton():
     collection = db['data']
     email=request.form.get("email")
     password=request.form.get("password")
-    if collection.find({"email":email}) in collection.find({}):
+    userdata=collection.find({})
+    emails=[]
+    session["status2"]=False
+    for i in userdata:
+        emails.append(i["email"])
+    if email in emails:
+        session["status2"]=True
         return redirect("/sign up")
+        
     
    
     else:
@@ -213,3 +220,23 @@ def order():
     for i in orders:
             price1+=int(i["price"])
     return render_template("order.html",items=orders,total=price1)
+
+@app.route("/continue",methods=["POST"])
+def checkout():
+    price1=0
+    db = client['shopping']  # Access the 'mydatabase' database
+    user_id = session.get('user_id')
+    collection1=db[user_id]
+    collection2=db["checkout"]
+    home=request.form.get("home")
+    city=request.form.get("city")
+    state=request.form.get("state")
+    code=request.form.get("code")
+    payment=request.form.get("payment_method")
+    address=[home,city,state,code]
+    orders=list(collection1.find({}))
+    for i in orders:
+            price1+=int(i["price"])
+    print("price1")
+    collection2.insert_one({"email":user_id,"address":address,"orders":orders,"price":price1,"payment":payment})
+    return render_template("/")

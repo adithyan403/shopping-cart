@@ -223,6 +223,7 @@ def order():
 
 @app.route("/continue",methods=["POST"])
 def checkout():
+    status=False
     price1=0
     db = client['shopping']  # Access the 'mydatabase' database
     user_id = session.get('user_id')
@@ -233,10 +234,30 @@ def checkout():
     state=request.form.get("state")
     code=request.form.get("code")
     payment=request.form.get("payment_method")
+    print(payment)
     address=[home,city,state,code]
     orders=list(collection1.find({}))
+    items=[]
     for i in orders:
+        name=i["name"]
+        image=i["image"]
+        price=i["price"]
+        dic={"name":name,"image":image,"price":price}
+        items.append(dic)
+    if status==False:
+        for i in orders:
             price1+=int(i["price"])
-    print("price1")
-    collection2.insert_one({"email":user_id,"address":address,"orders":orders,"price":price1,"payment":payment})
-    return render_template("/")
+    
+    emails=[]
+    for i in collection2.find({}):
+        emails.append(i["email"])
+    if user_id not in emails:
+        collection2.insert_one({"email":user_id,"address":address,"orders":orders,"total":price1,"payment":payment})
+        print("datainserted")
+    if payment=="cash_on_delivery":
+        status=True
+        collection1.delete_many({})
+
+        return render_template("myorders.html",items=items,total=price1)
+    else:
+        return render_template("/")

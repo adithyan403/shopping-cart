@@ -21,12 +21,14 @@ products=collection.find({})
 data=products
 @app.route('/')
 def mainpage():
+    count=0
     user_id = session.get('user_id')
     
     try:
         client.admin.command("ping")
     except:
         print("unseccessful cant connect")
+    
     db = client['shopping']  # Access the 'mydatabase' database
     collection = db['user']
     products=collection.find({})
@@ -73,7 +75,7 @@ def submit1():
 
 @app.route("/login")
 def login():
-    return render_template("login.html",status=login)
+    return render_template("login.html")
 
 @app.route("/logout")
 def logout():
@@ -82,6 +84,7 @@ def logout():
 
 @app.route("/loginbutton",methods=["POST"])
 def loginbutton():
+    user_id = session.get('user_id')
     email=request.form.get("email")
     password=request.form.get("password")
     db = client['shopping']  # Access the 'mydatabase' database
@@ -165,21 +168,21 @@ def editsubmit():
     collection = db['user']
     collection.update_one({"name":name},{'$set': {"name":name,"price":price,"category":category,"image":image}})
     return redirect("/viewproducts") 
-
+product=0
 @app.route("/addcart/<item>")
 def addcart(item):
     user_id = session.get('user_id')
-    count=0
-    if user_id:
-        db = client['shopping']
-        collection2=db[user_id]
-        count = collection2.count_documents({"name":item})
+    
         
-    db = client['shopping']  # Access the 'mydatabase' database
-    user_id = session.get('user_id')
-    collection=db[user_id]
-    collection2=db["user"]
-    price=collection2.find_one({"name":item})
+    if user_id:
+        db = client['shopping']  # Access the 'mydatabase' database
+        user_id = session.get('user_id')
+        collection=db[user_id]
+        collection2=db["user"]
+        price=collection2.find_one({"name":item})
+    else:
+        return redirect("/login")
+    
 
     collection.insert_one({"name":item,"price":price["price"],"image":price["image"]})
     

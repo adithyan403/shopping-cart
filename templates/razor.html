@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Payment Details</title>
+</head>
+<body>
+    <h1>Add Payment Details</h1>
+
+    <form id="paymentForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" required>
+
+        <button type="submit">Proceed to Payment</button>
+    </form>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var amount = document.getElementById('amount').value;
+
+            var options = {
+                key: 'rzp_test_84xxXjC3F0wLlX',
+                amount: amount * 100, // Amount in paise
+                currency: 'INR',
+                name: 'Your Store',
+                description: 'Payment for Purchase',
+                image: 'your_logo_url',
+                prefill: {
+                    name: name,
+                    email: email
+                },
+                theme: {
+                    color: '#F37254'
+                }
+            };
+
+            var rzp = new Razorpay(options);
+            rzp.open();
+        });
+    </script>
+</body>
+</html>

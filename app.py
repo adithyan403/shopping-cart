@@ -1,12 +1,16 @@
 from flask import Flask,render_template,request,session,redirect
 from pymongo import MongoClient as mon
 import bcrypt
+import razorpay
 from flask_session import Session
+
 
 
 client = mon('mongodb://localhost:27017/')
 
 app=Flask("__name__")
+razorpay_client = razorpay.Client(auth=("rzp_test_84xxXjC3F0wLlX", "YW1oTjqVoRIPyFntdPtdfzGzw"))
+
 app.config['SECRET_KEY'] = 'key'  # Replace with a secure secret key
 app.secret_key = app.config['SECRET_KEY']
 
@@ -266,11 +270,11 @@ def checkout():
     if payment=="cash_on_delivery":
         status=True
         collection3=db["deleted data"]
-        collection3.insert_many(collection1.find({}))
+        collection3.insert_one({"email":collection1.find({})})
         collection1.delete_many({})
 
         return render_template("myorders.html",items=items,total=price1)
     else:
-        return render_template("myorders.html",items=items,total=price)
+        return render_template("razor.html",items=items,total=price)
     
     

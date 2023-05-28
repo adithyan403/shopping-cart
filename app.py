@@ -13,7 +13,7 @@ app.secret_key = app.config['SECRET_KEY']
 if __name__ == '__name__':
     app.run(debug=True)
    
-
+status=False
 data=[]
 db = client['shopping']  # Access the 'mydatabase' database
 collection = db['user']
@@ -220,10 +220,17 @@ def order():
     for i in orders:
             price1+=int(i["price"])
     return render_template("order.html",items=orders,total=price1)
+@app.route("/myorders")
+def myorders():
+    db = client['shopping']
+    collection=db["deleted data"]
+    user=session.get("user_id")
+    data=collection.find({"email":user})
+    return render_template("myorders.html",items=data)
+
 
 @app.route("/continue",methods=["POST"])
 def checkout():
-    status=False
     price1=0
     db = client['shopping']  # Access the 'mydatabase' database
     user_id = session.get('user_id')
@@ -234,7 +241,6 @@ def checkout():
     state=request.form.get("state")
     code=request.form.get("code")
     payment=request.form.get("payment_method")
-    print(payment)
     address=[home,city,state,code]
     orders=list(collection1.find({}))
     items=[]
@@ -253,11 +259,15 @@ def checkout():
         emails.append(i["email"])
     if user_id not in emails:
         collection2.insert_one({"email":user_id,"address":address,"orders":orders,"total":price1,"payment":payment})
-        print("datainserted")
+
     if payment=="cash_on_delivery":
         status=True
+        collection3=db["deleted data"]
+        collection3.insert_many(collection1.find({}))
         collection1.delete_many({})
 
         return render_template("myorders.html",items=items,total=price1)
     else:
         return render_template("/")
+    
+    

@@ -40,7 +40,12 @@
             Shopping.com
           </a>
         <h1 class="text-center">Order Tracking</h1>
-        <h1>Order placed successfully</h1>
+        {% if items!={} %}
+            <h1>Order placed successfully</h1>
+        {% endif %}
+        {% if items=={} %}
+            <h1>No orders to place order go to cart</h1>
+        {% endif %}
         <div class="container mt-5">
             <h1>My orders</h1>
             <table class="table mt-4">
@@ -56,7 +61,7 @@
                     <tbody>
                         {% for item in items %}
                         <tr>
-                            <th scope="row" style="width: 2px; height: 2px;"><img src={{}} alt="Image"></th>
+                            <th scope="row" style="width: 2px; height: 2px;"><img src={{item.image}} alt="Image"></th>
                             <td>{{item.name}}</td>
                             <td>{{item.price}}</td>
                             <td></td>

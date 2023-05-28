@@ -40,12 +40,12 @@
             Shopping.com
           </a>
         <h1 class="text-center">Order Tracking</h1>
-        {% if items!={} %}
+        {% if emails!=[] %}
             <h1>Order placed successfully</h1>
         {% endif %}
-        {% if items=={} %}
+        {% else %}
             <h1>No orders to place order go to cart</h1>
-        {% endif %}
+        {% endelse %}
         <div class="container mt-5">
             <h1>My orders</h1>
             <table class="table mt-4">

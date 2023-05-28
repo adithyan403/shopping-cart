@@ -13,7 +13,6 @@ app.secret_key = app.config['SECRET_KEY']
 if __name__ == '__name__':
     app.run(debug=True)
    
-status=False
 data=[]
 db = client['shopping']  # Access the 'mydatabase' database
 collection = db['user']
@@ -222,15 +221,19 @@ def order():
     return render_template("order.html",items=orders,total=price1)
 @app.route("/myorders")
 def myorders():
+    emails=[]
     db = client['shopping']
     collection=db["deleted data"]
     user=session.get("user_id")
     data=collection.find({"email":user})
-    return render_template("myorders.html",items=data)
+    for i in data:
+        emails.append(i["email"])
+    return render_template("myorders.html",items=data,emails=emails)
 
 
 @app.route("/continue",methods=["POST"])
 def checkout():
+    status=False
     price1=0
     db = client['shopping']  # Access the 'mydatabase' database
     user_id = session.get('user_id')
@@ -268,6 +271,6 @@ def checkout():
 
         return render_template("myorders.html",items=items,total=price1)
     else:
-        return render_template("/")
+        return render_template("myorders.html",items=items,total=price)
     
     

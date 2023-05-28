@@ -225,14 +225,13 @@ def order():
     return render_template("order.html",items=orders,total=price1)
 @app.route("/myorders")
 def myorders():
-    emails=[]
-    db = client['shopping']
-    collection=db["deleted data"]
     user=session.get("user_id")
-    data=collection.find({"email":user})
-    for i in data:
-        emails.append(i["email"])
-    return render_template("myorders.html",items=data,emails=emails)
+    db = client["shopping"]
+    collection=db[user]
+    collection2=db["checkout"]    
+    data=collection.find({})
+    data2=collection2.find({"email":user})
+    return render_template("myorders.html",items=data2)
 
 
 @app.route("/continue",methods=["POST"])
@@ -269,9 +268,8 @@ def checkout():
 
     if payment=="cash_on_delivery":
         status=True
-        collection3=db["deleted data"]
-        collection3.insert_one({"email":collection1.find({})})
-        collection1.delete_many({})
+        items=collection1.find({})
+        
 
         return render_template("myorders.html",items=items,total=price1)
     else:
